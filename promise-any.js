@@ -1,7 +1,6 @@
 function any(tasks) {
   let arr = [];
   let count = tasks.length;
-  let resolved = false; // Flag to ensure only the first resolved promise is handled
 
   return new Promise(function (resolve, reject) {
     for (let i = 0; i < tasks.length; i++) {
