@@ -1,7 +1,6 @@
-function any(tasks) {
+function myPromiseAll(tasks) {
   let arr = [];
   let count = tasks.length;
-  let resolved = false; // Flag to ensure only the first resolved promise is handled
 
   return new Promise(function (resolve, reject) {
     for (let i = 0; i < tasks.length; i++) {
@@ -10,33 +9,31 @@ function any(tasks) {
 
       function result(val) {
         arr[i] = val;
-        resolve(arr[i]);
+        count--;
+
+        if (count == 0) resolve(arr);
       }
 
       function error(err) {
-        count--;
-        if (count === 0) {
-          reject(new Error("All promises rejected"));
-        }
+        reject(err);
       }
     }
   });
 }
 
-const test1 = new Promise(function (resolve, reject) {
-  setTimeout(reject, 500, "one");
-});
-const test2 = new Promise(function (resolve, reject) {
-  setTimeout(resolve, 600, "two");
-});
-const test3 = new Promise(function (resolve, reject) {
-  setTimeout(reject, 200, "three");
-});
-any([test1, test2, test3])
-  .then(function (value) {
-    // first and third fails, 2nd resolves
-    console.log(value);
-  })
-  .catch(function (err) {
-    console.log(err);
+// Input :
+
+function task(time) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(function () {
+      resolve(time);
+    }, time);
   });
+}
+const taskList = [task(1000), task(5000), task(3000)];
+//run promise.all
+myPromiseAll(taskList)
+  .then((results) => {
+    console.log("got results", results);
+  })
+  .catch(console.error);
