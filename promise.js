@@ -40,4 +40,8 @@ let p1 = new myPromise((resolve, reject) => {
 
 setTimeout(() => {
   p1.then((res) => console.log(res));
-}, 5000);
+}, 2000);
+
+setTimeout(() => {
+  p1.then((res) => console.log(res));
+}, 3000);
