@@ -11,37 +11,42 @@ function createSubarray(arr, limit) {
   return list;
 }
 
-async function mapLimit(arr, limit, iteratie) {
-  let subArray = createSubarray(arr, limit);
+async function mapLimit(arr, limit, iterate) {
+  const subArray = createSubarray(arr, limit);
+  const results = [];
 
-  let index = 0;
-  let res = [];
-
-  function processNext(item) {
+  async function processNext(item) {
     return new Promise((resolve, reject) => {
-      if (index < item.length) iteratie(item[index], callback);
-      else {
-        index = 0;
-        resolve();
-      }
+      let index = 0; // Initialize index here
 
       function callback(error, nextNum) {
-        if (error == true) {
+        if (error) {
           reject("Error occurred while processing");
         } else {
-          res.push(nextNum);
+          results.push(nextNum);
           index++;
-          processNext(item).then(resolve).catch(reject);
+          processElement(); // Call processElement() after processing each element
         }
       }
+
+      function processElement() {
+        if (index < item.length) {
+          iterate(item[index], callback);
+          // Move to the next index
+        } else {
+          resolve(); // Resolve when all elements processed
+        }
+      }
+
+      processElement(); // Start processing elements
     });
   }
 
-  for (let item of subArray) {
-    let p1 = await processNext(item);
+  for (const item of subArray) {
+    await processNext(item);
   }
 
-  return res;
+  return results;
 }
 
 let numPromise = mapLimit([1, 2, 3, 4, 5], 3, function (num, callback) {
