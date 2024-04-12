@@ -1,6 +1,6 @@
 const asyncTask = function (i) {
   return new Promise((resolve, reject) => {
-    setTimeout(() => resolve(`Completing ${i}`), 100 * i);
+    setTimeout(() => resolve(`Completing ${i}`), 1000 * i);
   });
 };
 
