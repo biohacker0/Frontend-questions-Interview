@@ -38,31 +38,23 @@ let s2 = new Stack();
 
 function Que() {
   this.enqueue = function (element) {
-    s1.push(element);
-  };
-
-  this.dequeue = function () {
-    if (s2.isEmpty()) {
-      while (!s1.isEmpty()) {
-        s2.push(s1.pop());
-      }
+    while (!s1.isEmpty()) {
+      s2.push(s1.pop());
     }
-    let element = s2.pop();
 
-    //refill s1
+    s2.push(element);
+
     while (!s2.isEmpty()) {
       s1.push(s2.pop());
     }
-    return element;
+  };
+
+  this.dequeue = function () {
+    return s1.pop();
   };
 
   this.peek = function () {
-    if (s2.isEmpty()) {
-      while (!s1.isEmpty()) {
-        s2.push(s1.pop());
-      }
-    }
-    return s2.peek();
+    return s1.peek();
   };
 
   this.isEmpty = function () {
@@ -73,16 +65,11 @@ function Que() {
 const queue = new Que();
 queue.enqueue(10);
 queue.enqueue(20);
-
-console.log(queue.peek());
-console.log(queue.dequeue());
-console.log(queue.peek());
-console.log(queue.enqueue(30));
-console.log(queue.enqueue(40));
-
+queue.enqueue(30);
+queue.enqueue(40);
+queue.enqueue(50);
 console.log(queue.peek());
 console.log(queue.dequeue());
 console.log(queue.peek());
 console.log(queue.dequeue());
 console.log(queue.peek());
-console.log(queue.dequeue());
